@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import './App.css';
 import Card from './components/Card';
+import Modal from './components/Modal';
 
 function App() {
   useEffect(() => {
@@ -30,18 +31,6 @@ function App() {
       column.addEventListener('drop', () => {
         if (draggedCard) {
           column.appendChild(draggedCard);
-
-          switch (column.id) {
-            case 'pending':
-              draggedCard.classList.add('bg-orange-200');
-              break;
-            case 'progress':
-              draggedCard.classList.add('bg-blue-200');
-              break;
-            case 'done':
-              draggedCard.classList.add('bg-green-200');
-              break;
-          }
         }
       });
     });
@@ -49,6 +38,9 @@ function App() {
 
   return (
     <div>
+      <div id="modal" className=''>
+        <Modal></Modal>
+      </div>
       <div className='flex justify-between px-32 py-12 items-center'>
         <h4 className='text-blue-500 font-black text-4xl'>TaskTeam</h4>
         <button className='text-white bg-blue-500 rounded-2xl px-6 py-3 text-lg font-medium cursor-pointer transition ease-in duration-200 hover:bg-blue-600 hover:-translate-x-1'>+ Nova Tarefa</button>
@@ -66,7 +58,6 @@ function App() {
           </div>
           <div id="done" className='bg-green-50 w-150 rounded'>
             <div className='p-4 bg-green-400 text-lg text-white font-medium rounded rounded-l-none rounded-b-none'>Concluído</div>
-            <div draggable className='p-6 m-6 bg-green-200 cursor-move rounded shadow font-bold text-lg'>Teste 3</div>
               <Card />
           </div>
         </div>
