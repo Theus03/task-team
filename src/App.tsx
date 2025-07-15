@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import './App.css';
+import Card from './components/Card';
 
 function App() {
   useEffect(() => {
@@ -30,8 +31,6 @@ function App() {
         if (draggedCard) {
           column.appendChild(draggedCard);
 
-          draggedCard.classList.remove('bg-orange-200', 'bg-blue-200', 'bg-green-200');
-
           switch (column.id) {
             case 'pending':
               draggedCard.classList.add('bg-orange-200');
@@ -55,18 +54,20 @@ function App() {
         <button className='text-white bg-blue-500 rounded-2xl px-6 py-3 text-lg font-medium cursor-pointer transition ease-in duration-200 hover:bg-blue-600 hover:-translate-x-1'>+ Nova Tarefa</button>
       </div>
       <div className='px-32 py-2' id="board">
-        <div className='bg-blue-50 flex h-100'>
-          <div id="pending" className='bg-amber-50 w-150 rounded'>
-            <div className='p-4 bg-orange-400 text-lg text-white font-medium rounded rounded-r-none'>Pendente</div>
-            <div draggable className='p-6 m-6 bg-orange-200 cursor-move rounded shadow'>Teste 1</div>
+        <div className='bg-blue-50 flex mb-6'>
+          <div id="pending" className='bg-amber-50 w-150 rounded h-auto'>
+            <div className='p-4 bg-orange-400 text-lg text-white font-medium rounded rounded-r-none rounded-b-none'>Pendente</div>
+              <Card />
           </div>
           <div id="progress" className='bg-blue-50 w-150 rounded'>
             <div className='p-4 bg-blue-400 text-lg text-white font-medium rounded rounded-l-none rounded-r-none'>Em Andamento</div>
-            <div draggable className='p-6 m-6 bg-blue-200 cursor-move rounded shadow'>Teste 2</div>
+              <Card />
+              <Card />
           </div>
           <div id="done" className='bg-green-50 w-150 rounded'>
-            <div className='p-4 bg-green-400 text-lg text-white font-medium rounded rounded-l-none'>Concluído</div>
-            <div draggable className='p-6 m-6 bg-green-200 cursor-move rounded shadow'>Teste 3</div>
+            <div className='p-4 bg-green-400 text-lg text-white font-medium rounded rounded-l-none rounded-b-none'>Concluído</div>
+            <div draggable className='p-6 m-6 bg-green-200 cursor-move rounded shadow font-bold text-lg'>Teste 3</div>
+              <Card />
           </div>
         </div>
       </div>
