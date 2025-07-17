@@ -6,7 +6,7 @@ import { modalStateAtom } from './atoms/modalAtom';
 import { useRecoilState } from 'recoil';
 
 function App() {
-  const [showModal, setShowModal] = useRecoilState(modalStateAtom);
+  const [_, setShowModal] = useRecoilState(modalStateAtom);
 
   useEffect(() => {
     const cards = document.querySelectorAll<HTMLDivElement>('[draggable="true"]');
