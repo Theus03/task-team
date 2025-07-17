@@ -2,8 +2,12 @@ import { useEffect } from 'react';
 import './App.css';
 import Card from './components/Card';
 import Modal from './components/Modal';
+import { modalStateAtom } from './atoms/modalAtom';
+import { useRecoilState } from 'recoil';
 
 function App() {
+  const [showModal, setShowModal] = useRecoilState(modalStateAtom);
+
   useEffect(() => {
     const cards = document.querySelectorAll<HTMLDivElement>('[draggable="true"]');
     const columns = document.querySelectorAll<HTMLDivElement>('#pending, #progress, #done');
@@ -43,7 +47,9 @@ function App() {
       </div>
       <div className='flex justify-between px-32 py-12 items-center'>
         <h4 className='text-blue-500 font-black text-4xl'>TaskTeam</h4>
-        <button className='text-white bg-blue-500 rounded-2xl px-6 py-3 text-lg font-medium cursor-pointer transition ease-in duration-200 hover:bg-blue-600 hover:-translate-x-1'>+ Nova Tarefa</button>
+        <div className='flex gap-2'>
+          <button onClick={() => setShowModal(true)} className='text-white bg-blue-500 rounded-2xl px-6 py-3 text-lg font-medium cursor-pointer transition ease-in duration-200 hover:bg-blue-600 hover:-translate-x-1'>+ Nova Tarefa</button>
+        </div>
       </div>
       <div className='px-32 py-2' id="board">
         <div className='bg-blue-50 flex mb-6'>
