@@ -1,12 +1,35 @@
 import { useRecoilState } from "recoil";
 import { modalStateAtom } from "../atoms/modalAtom";
 import { format } from "date-fns";
+import { useState } from "react";
+import type { Task } from "../types/Task";
+import { useTaskCRUD } from "../hooks/useTaskCRUD";
 
 export default function Modal() {
 
     const [showModal, setShowModal] = useRecoilState(modalStateAtom);
+    const [descricao, setDescricao] = useState("");
 
     const dataCriacao = format(new Date(), 'dd/MM/yyyy');
+    const CRUD = useTaskCRUD();
+    
+    const handleAdd = () => {
+
+        const id = new Date().getHours() + new Date().getMinutes() + new Date().getSeconds();
+
+        const task: Task = {
+            id: id,
+            descricao: descricao,
+            user: "Matheus Leite",
+            dataCriacao: "21/07/2025"
+        }
+
+        CRUD.addTask(task);
+
+        console.log("Criou...")
+
+        setShowModal(false);
+    }
 
     return (
         <div className={`fixed ${showModal ? `grid` : `hidden`} inset-0 z-50 place-content-center bg-black/50 p-4`} role="dialog" aria-modal="true" aria-labelledby="modalTitle" >
@@ -22,7 +45,7 @@ export default function Modal() {
                 <div className="mt-4">
                     <label htmlFor="Descricao" className="mt-4 block">
                         <span className="text-sm font-medium text-gray-700">Descrição</span>
-                        <input type="text" id="Descricao" className="mt-0.5 p-2 w-full rounded border border-gray-300 shadow-sm sm:text-sm" />
+                        <input onChange={(e) => setDescricao(e.target.value)} type="text" id="Descricao" className="mt-0.5 p-2 w-full rounded border border-gray-300 shadow-sm sm:text-sm" />
                     </label>
                 </div>
                 <div className="mt-4">
@@ -39,7 +62,7 @@ export default function Modal() {
                 </div>
                 <footer className="mt-6 flex justify-between gap-2">
                     <button onClick={() => setShowModal(false)} type="button" className="rounded bg-gray-100 cursor-pointer px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200" >Cancelar</button>
-                    <button type="button" className="rounded bg-blue-600 cursor-pointer px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700">Adicionar</button>
+                    <button onClick={() => handleAdd()} type="button" className="rounded bg-blue-600 cursor-pointer px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700">Adicionar</button>
                 </footer>
             </div>
         </div>
