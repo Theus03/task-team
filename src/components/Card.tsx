@@ -1,4 +1,10 @@
-export default function Card() {
+import type { Task } from "../types/Task";
+
+type CardProps = {
+    task: Task
+}
+
+export default function Card( { task }: CardProps) {
     return (
         <div draggable className="cursor-move m-6 shadow block rounded-md border border-gray-300 p-4 sm:p-6">
             <div className="sm:flex sm:justify-between sm:gap-4 lg:gap-6">
@@ -6,8 +12,8 @@ export default function Card() {
                 <img alt="Photo User" src="https://images.unsplash.com/photo-1752599071610-5c4c87cef0e8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwcm9maWxlLXBhZ2V8MXx8fGVufDB8fHx8fA%3D%3D" className="size-16 rounded-full object-cover sm:size-[72px]"/>
                 </div>
                 <div className="mt-4 sm:mt-0">
-                <h3 className="text-lg font-medium text-pretty text-gray-900">Atualizar Readme do meu Github</h3>
-                <p className="mt-1 text-sm text-gray-700">Matheus Leite</p>
+                <h3 className="text-lg font-medium text-pretty text-gray-900">{task.descricao}</h3>
+                <p className="mt-1 text-sm text-gray-700">{task.user}</p>
                 </div>
             </div>
             <dl className="mt-6 flex gap-4 lg:gap-6">

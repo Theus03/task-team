@@ -20,6 +20,7 @@ export default function Modal() {
         const task: Task = {
             id: id,
             descricao: descricao,
+            status: 1,
             user: "Matheus Leite",
             dataCriacao: "21/07/2025"
         }

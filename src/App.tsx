@@ -4,9 +4,11 @@ import Card from './components/Card';
 import Modal from './components/Modal';
 import { modalStateAtom } from './atoms/modalAtom';
 import { useRecoilState } from 'recoil';
+import { taskListState } from './atoms/taskListState';
 
 function App() {
   const [_, setShowModal] = useRecoilState(modalStateAtom);
+  const [task, setTasks] = useRecoilState(taskListState);
 
   useEffect(() => {
     const cards = document.querySelectorAll<HTMLDivElement>('[draggable="true"]');
@@ -55,16 +57,15 @@ function App() {
         <div className='bg-blue-50 flex mb-6'>
           <div id="pending" className='bg-amber-50 w-150 rounded h-auto'>
             <div className='p-4 bg-orange-400 text-lg text-white font-medium rounded rounded-r-none rounded-b-none'>Pendente</div>
-              <Card />
+              { task.filter(t => t.status == 1)?.map(t => <Card task={t} />) }
           </div>
           <div id="progress" className='bg-blue-50 w-150 rounded'>
             <div className='p-4 bg-blue-400 text-lg text-white font-medium rounded rounded-l-none rounded-r-none'>Em Andamento</div>
-              <Card />
-              <Card />
+              { task.filter(t => t.status == 2)?.map(t => <Card task={t} />) }
           </div>
           <div id="done" className='bg-green-50 w-150 rounded'>
             <div className='p-4 bg-green-400 text-lg text-white font-medium rounded rounded-l-none rounded-b-none'>Concluído</div>
-              <Card />
+              { task.filter(t => t.status == 3)?.map(t => <Card task={t} />) }
           </div>
         </div>
       </div>

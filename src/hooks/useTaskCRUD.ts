@@ -3,7 +3,12 @@ import { taskListState } from "../atoms/taskListState";
 import type { Task } from "../types/Task";
 
 export function useTaskCRUD() {
-    const [_, setTasks] = useRecoilState(taskListState);
+    const [tasks, setTasks] = useRecoilState(taskListState);
+
+    const allTasks = () => {
+        console.log(tasks);
+        return tasks;
+    }
 
     const addTask = (task: Task) => {
         setTasks((old) => [...old, task]);
@@ -17,5 +22,5 @@ export function useTaskCRUD() {
         setTasks((old) => old.filter(t => t.id !== id));
     }
 
-    return { addTask, updateTask, deleteTask }
+    return { allTasks, addTask, updateTask, deleteTask }
 }
