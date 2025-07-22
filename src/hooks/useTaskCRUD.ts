@@ -6,8 +6,11 @@ export function useTaskCRUD() {
     const [tasks, setTasks] = useRecoilState(taskListState);
 
     const allTasks = () => {
-        console.log(tasks);
         return tasks;
+    }
+
+    const getTask = (id: number) => {
+        return tasks.filter(task => task.id == id);
     }
 
     const addTask = (task: Task) => {
@@ -22,5 +25,5 @@ export function useTaskCRUD() {
         setTasks((old) => old.filter(t => t.id !== id));
     }
 
-    return { allTasks, addTask, updateTask, deleteTask }
+    return { allTasks, getTask, addTask, updateTask, deleteTask }
 }
