@@ -5,6 +5,7 @@ import Modal from './components/Modal';
 import { modalStateAtom } from './atoms/modalAtom';
 import { useRecoilState } from 'recoil';
 import { taskListState } from './atoms/taskListState';
+import { useTaskCRUD } from './hooks/useTaskCRUD';
 
 function App() {
   const [_, setShowModal] = useRecoilState(modalStateAtom);
@@ -16,31 +17,56 @@ function App() {
 
     let draggedCard: HTMLElement | null = null;
 
-    cards.forEach(card => {
-      card.addEventListener('dragstart', (e: DragEvent) => {
-        draggedCard = card;
-        e.dataTransfer?.setData('text/plain', '');
-        setTimeout(() => card.classList.add('hidden'), 0);
-      });
+    const handleDragStart = (e: DragEvent) => {
+      const card = e.currentTarget as HTMLElement;
+      draggedCard = card;
+      e.dataTransfer?.setData('text/plain', '');
+      setTimeout(() => card.classList.add('hidden'), 0);
+    };
 
-      card.addEventListener('dragend', () => {
-        draggedCard?.classList.remove('hidden');
-        draggedCard = null;
-      });
+    const handleDragEnd = (e: DragEvent) => {
+      const card = e.currentTarget as HTMLElement;
+      card.classList.remove('hidden');
+      draggedCard = null;
+    };
+
+    const handleDragOver = (e: DragEvent) => {
+      e.preventDefault();
+    };
+
+    const handleDrop = (e: DragEvent) => {
+      const column = e.currentTarget as HTMLElement;
+      console.log(task);
+      task[0].status = 2;
+      useTaskCRUD().updateTask(task[0]);
+      if (draggedCard) {
+        console.log("chegou aui")
+        column.appendChild(draggedCard);
+      }
+    };
+
+    cards.forEach(card => {
+      card.addEventListener('dragstart', handleDragStart);
+      card.addEventListener('dragend', handleDragEnd);
     });
 
     columns.forEach(column => {
-      column.addEventListener('dragover', (e: DragEvent) => {
-        e.preventDefault();
+      column.addEventListener('dragover', handleDragOver);
+      column.addEventListener('drop', handleDrop);
+    });
+
+    return () => {
+      cards.forEach(card => {
+        card.removeEventListener('dragstart', handleDragStart);
+        card.removeEventListener('dragend', handleDragEnd);
       });
 
-      column.addEventListener('drop', () => {
-        if (draggedCard) {
-          column.appendChild(draggedCard);
-        }
+      columns.forEach(column => {
+        column.removeEventListener('dragover', handleDragOver);
+        column.removeEventListener('drop', handleDrop);
       });
-    });
-  }, []);
+    };
+  }, [task]);
 
   return (
     <div>
@@ -57,15 +83,15 @@ function App() {
         <div className='bg-blue-50 flex mb-6'>
           <div id="pending" className='bg-amber-50 w-150 rounded h-auto'>
             <div className='p-4 bg-orange-400 text-lg text-white font-medium rounded rounded-r-none rounded-b-none'>Pendente</div>
-              { task.filter(t => t.status == 1)?.map(t => <Card task={t} />) }
+              { task.filter(t => t.status == 1)?.map(t => <Card key={t.id} task={t} />) }
           </div>
           <div id="progress" className='bg-blue-50 w-150 rounded'>
             <div className='p-4 bg-blue-400 text-lg text-white font-medium rounded rounded-l-none rounded-r-none'>Em Andamento</div>
-              { task.filter(t => t.status == 2)?.map(t => <Card task={t} />) }
+              { task.filter(t => t.status == 2)?.map(t => <Card key={t.id} task={t} />) }
           </div>
           <div id="done" className='bg-green-50 w-150 rounded'>
             <div className='p-4 bg-green-400 text-lg text-white font-medium rounded rounded-l-none rounded-b-none'>Concluído</div>
-              { task.filter(t => t.status == 3)?.map(t => <Card task={t} />) }
+              { task.filter(t => t.status == 3)?.map(t => <Card key={t.id} task={t} />) }
           </div>
         </div>
       </div>
