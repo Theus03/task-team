@@ -26,9 +26,7 @@ export default function Modal() {
         }
 
         CRUD.addTask(task);
-
-        console.log("Criou...")
-
+        
         setShowModal(false);
     }
 

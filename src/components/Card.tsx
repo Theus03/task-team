@@ -6,7 +6,7 @@ type CardProps = {
 
 export default function Card( { task }: CardProps) {
     return (
-        <div draggable className="cursor-move m-6 shadow block rounded-md border border-gray-300 p-4 sm:p-6">
+        <div id={task.id.toString()} draggable={true} className="cursor-move m-6 shadow block rounded-md border border-gray-300 p-4 sm:p-6">
             <div className="sm:flex sm:justify-between sm:gap-4 lg:gap-6">
                 <div className="sm:order-last sm:shrink-0">
                 <img alt="Photo User" src="https://images.unsplash.com/photo-1752599071610-5c4c87cef0e8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwcm9maWxlLXBhZ2V8MXx8fGVufDB8fHx8fA%3D%3D" className="size-16 rounded-full object-cover sm:size-[72px]"/>
