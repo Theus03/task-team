@@ -1,3 +1,4 @@
+import { getMinutes } from "date-fns";
 import type { Task } from "../types/Task";
 
 type CardProps = {
@@ -5,6 +6,41 @@ type CardProps = {
 }
 
 export default function Card( { task }: CardProps) {
+   function parseDataBR(dataBR: string): Date | null {
+    const [dia, mes, ano] = dataBR.split('/');
+    const date = new Date(
+        Number(ano),
+        Number(mes) - 1, // Mês começa em 0 (janeiro)
+        Number(dia)
+    );
+
+    return isNaN(date.getTime()) ? null : date;
+}
+
+function taskDesde(dataTask: string): string {
+    const data = parseDataBR(dataTask);
+    if (!data) return 'Data inválida';
+
+    const agora = new Date();
+    const diffMs = agora.getTime() - data.getTime();
+
+    const segundos = Math.floor(diffMs / 1000);
+    const minutos = Math.floor(segundos / 60);
+    const horas = Math.floor(minutos / 60);
+    const dias = Math.floor(horas / 24);
+    const meses = Math.floor(dias / 30);
+    const anos = Math.floor(meses / 12);
+
+    if (anos > 0) return `Criado há ${anos} ano${anos > 1 ? 's' : ''}`;
+    if (meses > 0) return `Criado há ${meses} mês${meses > 1 ? 'es' : ''}`;
+    if (dias > 0) return `Criado há ${dias} dia${dias > 1 ? 's' : ''}`;
+    if (horas > 0) return `Criado há ${horas} hora${horas > 1 ? 's' : ''}`;
+    if (minutos > 0) return `Criado há ${minutos} minuto${minutos > 1 ? 's' : ''}`;
+    return `Criado há ${segundos} segundo${segundos > 1 ? 's' : ''}`;
+}
+
+
+
     return (
         <div id={task.id.toString()} draggable={true} className="cursor-move m-6 shadow block rounded-md border border-gray-300 p-4 sm:p-6">
             <div className="sm:flex sm:justify-between sm:gap-4 lg:gap-6">
@@ -24,7 +60,7 @@ export default function Card( { task }: CardProps) {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"/>
                     </svg>
                 </dt>
-                <dd className="text-xs text-gray-700">15/07/2025</dd>
+                <dd className="text-xs text-gray-700">{task.dataCriacao}</dd>
                 </div>
                 <div className="flex items-center gap-2">
                 <dt className="text-gray-700">
@@ -45,7 +81,7 @@ export default function Card( { task }: CardProps) {
                     </svg>
                 </dt>
 
-                <dd className="text-xs text-gray-700">Criado há 12 minutos</dd>
+                <dd className="text-xs text-gray-700">{taskDesde(task.dataCriacao)}</dd>
                 </div>
             </dl>
         </div>

@@ -1,13 +1,16 @@
 import { useRecoilState } from "recoil";
-import { modalStateAtom } from "../atoms/modalAtom";
+import { alertStateAtom, modalStateAtom } from "../atoms/actionsAtom";
 import { format } from "date-fns";
 import { useState } from "react";
 import type { Task } from "../types/Task";
 import { useTaskCRUD } from "../hooks/useTaskCRUD";
+import Alert from "./Alert";
 
 export default function Modal() {
 
     const [showModal, setShowModal] = useRecoilState(modalStateAtom);
+    const [_, setShowAlert] = useRecoilState(alertStateAtom);
+
     const [descricao, setDescricao] = useState("");
 
     const dataCriacao = format(new Date(), 'dd/MM/yyyy');
@@ -22,16 +25,22 @@ export default function Modal() {
             descricao: descricao,
             status: 1,
             user: "Matheus Leite",
-            dataCriacao: "21/07/2025"
+            dataCriacao: dataCriacao
         }
 
         CRUD.addTask(task);
-        
+
         setShowModal(false);
+
+        setShowAlert(true);
+
+        setTimeout(() => { setShowAlert(false) }, 2000);
     }
 
     return (
         <div className={`fixed ${showModal ? `grid` : `hidden`} inset-0 z-50 place-content-center bg-black/50 p-4`} role="dialog" aria-modal="true" aria-labelledby="modalTitle" >
+
+            <Alert />
             <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
                 <div className="flex items-start justify-between">
                     <h2 id="modalTitle" className="text-xl font-bold text-gray-900 sm:text-2xl">Nova Tarefa</h2>

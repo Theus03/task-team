@@ -2,13 +2,15 @@ import { useEffect } from 'react';
 import './App.css';
 import Card from './components/Card';
 import Modal from './components/Modal';
-import { modalStateAtom } from './atoms/modalAtom';
+import { alertStateAtom, modalStateAtom } from './atoms/actionsAtom';
 import { useRecoilState } from 'recoil';
 import { taskListState } from './atoms/taskListState';
 import { useTaskCRUD } from './hooks/useTaskCRUD';
+import Alert from './components/Alert';
 
 function App() {
-  const [_, setShowModal] = useRecoilState(modalStateAtom);
+  const [showModal, setShowModal] = useRecoilState(modalStateAtom);
+  const [showAlert, setShowAlert] = useRecoilState(alertStateAtom);
   const [task, setTasks] = useRecoilState(taskListState);
 
   const { updateTask } = useTaskCRUD();
@@ -16,6 +18,10 @@ function App() {
   useEffect(() => {
     const cards = document.querySelectorAll<HTMLDivElement>('[draggable="true"]');
     const columns = document.querySelectorAll<HTMLDivElement>('[data-status]');
+
+    setTimeout(() => {
+      setTasks(task)
+    }, 100000)
 
     let draggedCard: HTMLElement | null = null;
 
@@ -56,6 +62,9 @@ function App() {
 
       updateTask(taskAtualizada);
       setTasks(prev => prev.map(t => (t.id === taskId ? taskAtualizada : t)));
+      setShowAlert(true);
+
+      setTimeout(() => { setShowAlert(false); }, 1000)
     }
     
     draggedCard.classList.remove('hidden');
@@ -89,6 +98,9 @@ function App() {
 
   return (
     <div>
+      <div id="alert">
+        <Alert />
+      </div>
       <div id="modal">
         <Modal />
       </div>
